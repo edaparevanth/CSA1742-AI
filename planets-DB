@@ -1,0 +1,12 @@
+% planet(Name, OrderFromSun, DiameterKM, Moons, Type).
+
+planet(mercury, 1, 4879, 0, terrestrial).
+planet(venus,   2, 12104, 0, terrestrial).
+planet(earth,   3, 12742, 1, terrestrial).
+planet(mars,    4, 6779, 2, terrestrial).
+planet(jupiter, 5, 139820, 79, gas_giant).
+planet(saturn,  6, 116460, 83, gas_giant).
+planet(uranus,  7, 50724, 27, ice_giant).
+planet(neptune, 8, 49244, 14, ice_giant).
+planet(pluto,   9, 2376, 5, dwarf).
+
