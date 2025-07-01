@@ -1,0 +1,19 @@
+% Goal state: monkey has the banana
+goal(state(_, _, _, has)).
+
+% Move action
+move(state(Monkey, onfloor, Box, hasnot), walk(Monkey, NewPos), state(NewPos, onfloor, Box, hasnot)).
+
+% Push box while walking
+move(state(Pos, onfloor, Pos, hasnot), push(Pos, NewPos), state(NewPos, onfloor, NewPos, hasnot)).
+
+% Climb box
+move(state(Pos, onfloor, Pos, hasnot), climb, state(Pos, onbox, Pos, hasnot)).
+
+% Grasp banana
+move(state(middle, onbox, middle, hasnot), grasp, state(middle, onbox, middle, has)).
+
+% Plan from state to goal
+plan(State, [], State) :- goal(State).
+
+plan(State, [Action | Actions], FinalState) :-
