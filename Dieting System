@@ -1,0 +1,17 @@
+% disease_diet(Disease, Diet).
+
+disease_diet(diabetes, 'Low sugar, high fiber, whole grains, vegetables, lean protein').
+disease_diet(hypertension, 'Low salt, potassium-rich foods, fruits, vegetables, whole grains').
+disease_diet(obesity, 'Calorie-controlled, high protein, low carb, fruits, vegetables').
+disease_diet(anemia, 'Iron-rich foods like spinach, red meat, legumes, vitamin C sources').
+disease_diet(heart_disease, 'Low fat, low cholesterol, whole grains, lean meat, omega-3 rich foods').
+disease_diet(kidney_stone, 'Low oxalate foods, drink more water, reduce salt and animal protein').
+disease_diet(ulcer, 'Avoid spicy food, eat bland soft food, milk, bananas, oatmeal').
+disease_diet(typhoid, 'Soft, high-calorie, easily digestible foods, drink fluids').
+disease_diet(jaundice, 'High carb, low fat, fruit juices, boiled vegetables').
+
+% To suggest diet based on user input
+suggest_diet(Disease) :-
+    disease_diet(Disease, Diet),
+    write('Recommended diet for '), write(Disease), write(' is: '), nl,
+    write(Diet), nl.
