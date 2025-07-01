@@ -1,0 +1,45 @@
+% Edges: edge(Node1, Node2, Cost)
+edge(a, b, 1).
+edge(a, c, 3).
+edge(b, d, 1).
+edge(b, e, 5).
+edge(c, f, 6).
+edge(d, g, 1).
+edge(e, g, 2).
+edge(f, g, 9).
+
+% Heuristics: heuristic(Node, HeuristicValue)
+heuristic(a, 7).
+heuristic(b, 6).
+heuristic(c, 2).
+heuristic(d, 1).
+heuristic(e, 4).
+heuristic(f, 3).
+heuristic(g, 0).  % Goal node has 0
+
+% Best-first search: bestfs(Start, Goal, Path)
+bestfs(Start, Goal, Path) :-
+    bestfs([[Start]], Goal, RevPath),
+    reverse(RevPath, Path).
+
+% If first path leads to goal
+bestfs([[Goal | Rest] | _], Goal, [Goal | Rest]).
+
+% Search continuation
+bestfs([CurrentPath | OtherPaths], Goal, FinalPath) :-
+    CurrentPath = [CurrentNode | _],
+    findall([Next, CurrentNode | Rest],
+            (edge(CurrentNode, Next, _), \+ member(Next, CurrentPath)),
+            NewPaths),
+    append(OtherPaths, NewPaths, AllPaths),
+    sort_paths(AllPaths, SortedPaths),
+    bestfs(SortedPaths, Goal, FinalPath).
+
+% Sort paths by heuristic of head node
+sort_paths(Paths, Sorted) :-
+    map_list_to_pairs(path_heuristic, Paths, Pairs),
+    keysort(Pairs, SortedPairs),
+    pairs_values(SortedPairs, Sorted).
+
+% Get heuristic of the head of a path
+path_heuristic([Node | _], H) :- heuristic(Node, H).
