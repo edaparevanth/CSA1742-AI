@@ -1,0 +1,54 @@
+% Dynamic knowledge base (facts can be asserted or retracted)
+:- dynamic has/1.
+
+% Disease rules (goals)
+disease(flu) :-
+    has(fever),
+    has(cough),
+    has(sore_throat).
+
+disease(covid19) :-
+    has(fever),
+    has(cough),
+    has(loss_of_taste),
+    has(breathing_difficulty).
+
+disease(common_cold) :-
+    has(sneezing),
+    has(runny_nose),
+    has(sore_throat).
+
+disease(typhoid) :-
+    has(fever),
+    has(abdominal_pain),
+    has(weakness).
+
+% Ask user about symptoms interactively if not known
+has(Symptom) :-
+    known(Symptom), !.
+
+has(Symptom) :-
+    not(known(not(Symptom))),
+    ask(Symptom),
+    has(Symptom).
+
+% Ask user
+ask(Symptom) :-
+    write('Do you have '), write(Symptom), write('? (yes/no): '),
+    read(Response),
+    ( (Response == yes ; Response == y)
+      -> assertz(known(Symptom))
+      ;  assertz(known(not(Symptom))), fail ).
+
+% Reset known facts
+reset :-
+    retractall(known(_)),
+    write('All previous responses cleared.'), nl.
+
+% Run diagnosis by trying to prove disease rules
+diagnose :-
+    reset,
+    (disease(Disease) ->
+        format('~nYou may have: ~w~n', [Disease])
+    ;
+        write('\nNo matching diagnosis found.') ).
