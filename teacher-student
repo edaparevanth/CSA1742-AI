@@ -1,0 +1,25 @@
+% student(Name, RollNo).
+student(john, 101).
+student(anna, 102).
+student(ravi, 103).
+student(sara, 104).
+
+% teacher(Name, SubjectCode).
+teacher(mr_smith, cs101).
+teacher(ms_clara, math201).
+teacher(mr_rahul, phy301).
+
+% subject(SubjectCode, SubjectName).
+subject(cs101, 'Computer Science').
+subject(math201, 'Mathematics').
+subject(phy301, 'Physics').
+
+% teaches(Teacher, SubjectCode).
+teaches(Teacher, SubjectCode) :- teacher(Teacher, SubjectCode).
+
+% enrolled(StudentName, SubjectCode).
+enrolled(john, cs101).
+enrolled(anna, cs101).
+enrolled(ravi, math201).
+enrolled(sara, phy301).
+enrolled(john, phy301).
