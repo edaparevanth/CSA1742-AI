@@ -1,0 +1,6 @@
+% person(Name, DOB).
+person(john, '1995-05-20').
+person(susan, '1989-11-03').
+person(rahul, '2000-01-15').
+person(alex, '1992-12-12').
+person(diya, '1998-07-30').
