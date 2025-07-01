@@ -1,0 +1,28 @@
+import itertools
+
+def solve_cryptarithm():
+    letters = 'WATERMS'
+    digits = range(10)
+
+    for perm in itertools.permutations(digits, len(letters)):
+        assign = dict(zip(letters, perm))
+
+        # No leading zero
+        if assign['W'] == 0 or assign['S'] == 0:
+            continue
+
+        # Convert words to numbers
+        water = 10000 * assign['W'] + 1000 * assign['A'] + 100 * assign['T'] + 10 * assign['E'] + assign['R']
+        stream = 100000 * assign['S'] + 10000 * assign['T'] + 1000 * assign['R'] + 100 * assign['E'] + 10 * assign['A'] + assign['M']
+
+        if water + water == stream:
+            print(f"Solution found:")
+            for k in sorted(assign.keys()):
+                print(f"{k} = {assign[k]}")
+            print(f"\n{water} + {water} = {stream}")
+            return
+
+    print("No solution found.")
+
+# Run the solver
+solve_cryptarithm()
