@@ -1,0 +1,68 @@
+# Dataset: [Outlook, Temperature, Humidity, Wind], Label = PlayTennis
+dataset = [
+    ['Sunny', 'Hot', 'High', 'Weak', 'No'],
+    ['Sunny', 'Hot', 'High', 'Strong', 'No'],
+    ['Overcast', 'Hot', 'High', 'Weak', 'Yes'],
+    ['Rain', 'Mild', 'High', 'Weak', 'Yes'],
+    ['Rain', 'Cool', 'Normal', 'Weak', 'Yes'],
+    ['Rain', 'Cool', 'Normal', 'Strong', 'No'],
+    ['Overcast', 'Cool', 'Normal', 'Strong', 'Yes'],
+    ['Sunny', 'Mild', 'High', 'Weak', 'No'],
+    ['Sunny', 'Cool', 'Normal', 'Weak', 'Yes'],
+]
+
+features = ['Outlook', 'Temperature', 'Humidity', 'Wind']
+
+class DecisionNode:
+    def __init__(self, feature=None, value=None, results=None, branches=None):
+        self.feature = feature      # feature to split on
+        self.value = value          # value for feature
+        self.results = results      # dict of labels (if leaf)
+        self.branches = branches or {}
+
+def build_tree(data, features):
+    # Base case: all same label
+    labels = [row[-1] for row in data]
+    if labels.count(labels[0]) == len(labels):
+        return DecisionNode(results={labels[0]: len(labels)})
+    
+    # Base case: no features left
+    if not features:
+        return DecisionNode(results=count_labels(data))
+    
+    # Select best feature (simplified: just first feature for demo)
+    best_feat = 0
+    best_feature_name = features[best_feat]
+    
+    # Split data
+    tree = DecisionNode(feature=best_feature_name)
+    feature_values = set(row[best_feat] for row in data)
+    
+    for val in feature_values:
+        subset = [row[:best_feat] + row[best_feat+1:] for row in data if row[best_feat] == val]
+        sub_features = features[:best_feat] + features[best_feat+1:]
+        subtree = build_tree(subset, sub_features)
+        tree.branches[val] = subtree
+    
+    return tree
+
+def count_labels(rows):
+    results = {}
+    for row in rows:
+        label = row[-1]
+        results[label] = results.get(label, 0) + 1
+    return results
+
+def print_tree(tree, indent=''):
+    if tree.results:
+        print(indent + "Leaf:", tree.results)
+    else:
+        print(indent + f"{tree.feature}?")
+        for val, branch in tree.branches.items():
+            print(indent + f"-> {val}:")
+            print_tree(branch, indent + "  ")
+
+# Build and display the tree
+tree = build_tree(dataset, features)
+print_tree(tree)
+
