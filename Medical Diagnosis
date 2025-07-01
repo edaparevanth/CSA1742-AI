@@ -1,0 +1,77 @@
+% Symptoms for different diseases
+
+disease(flu) :-
+    symptom(fever),
+    symptom(cough),
+    symptom(body_ache),
+    symptom(sore_throat).
+
+disease(covid19) :-
+    symptom(fever),
+    symptom(cough),
+    symptom(loss_of_taste),
+    symptom(breathing_difficulty).
+
+disease(malaria) :-
+    symptom(fever),
+    symptom(chills),
+    symptom(sweating),
+    symptom(nausea).
+
+disease(dengue) :-
+    symptom(fever),
+    symptom(headache),
+    symptom(joint_pain),
+    symptom(rash).
+
+disease(common_cold) :-
+    symptom(sneezing),
+    symptom(runny_nose),
+    symptom(sore_throat),
+    symptom(mild_fever).
+
+disease(typhoid) :-
+    symptom(fever),
+    symptom(abdominal_pain),
+    symptom(weakness),
+    symptom(headache).
+
+% Ask user for symptoms (interactive)
+ask_symptom(S) :-
+    write('Do you have '), write(S), write('? (yes/no): '),
+    read(Reply),
+    (Reply == yes -> assert(symptom(S)) ; fail).
+
+% Start diagnosis
+start_diagnosis :-
+    retractall(symptom(_)),
+    findall(S, possible_symptom(S), Symptoms),
+    ask_symptoms(Symptoms),
+    (disease(D) ->
+        format('~nLikely disease: ~w~n', [D])
+    ; write('~nNo matching disease found.')).
+
+% Possible symptoms for interaction
+possible_symptom(fever).
+possible_symptom(cough).
+possible_symptom(body_ache).
+possible_symptom(sore_throat).
+possible_symptom(loss_of_taste).
+possible_symptom(breathing_difficulty).
+possible_symptom(chills).
+possible_symptom(sweating).
+possible_symptom(nausea).
+possible_symptom(headache).
+possible_symptom(joint_pain).
+possible_symptom(rash).
+possible_symptom(sneezing).
+possible_symptom(runny_nose).
+possible_symptom(mild_fever).
+possible_symptom(abdominal_pain).
+possible_symptom(weakness).
+
+% Recursively ask all symptoms
+ask_symptoms([]).
+ask_symptoms([S | Rest]) :-
+    (ask_symptom(S) ; true),
+    ask_symptoms(Rest).
