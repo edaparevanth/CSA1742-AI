@@ -1,0 +1,4 @@
+match_name(person(john, doe)).
+match_name(person(First, Last)) :-
+    write('First Name: '), write(First), nl,
+    write('Last Name: '), write(Last), nl.
