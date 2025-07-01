@@ -1,0 +1,65 @@
+from collections import deque
+
+# Define the goal state
+goal_state = (0, 0, 0)  # (missionaries_left, cannibals_left, boat_position)
+
+# All possible moves
+moves = [
+    (1, 0),  # 1 missionary
+    (2, 0),  # 2 missionaries
+    (0, 1),  # 1 cannibal
+    (0, 2),  # 2 cannibals
+    (1, 1),  # 1 missionary and 1 cannibal
+]
+
+def is_valid(m, c):
+    # Ensure counts are within range and missionaries are not outnumbered
+    return (0 <= m <= 3 and 0 <= c <= 3 and (m == 0 or m >= c))
+
+def get_successors(state):
+    successors = []
+    m, c, boat = state
+    direction = -1 if boat == 1 else 1  # Moving to the other side
+
+    for dm, dc in moves:
+        new_m = m + direction * dm
+        new_c = c + direction * dc
+        new_boat = 1 - boat
+
+        if is_valid(new_m, new_c) and is_valid(3 - new_m, 3 - new_c):
+            successors.append((new_m, new_c, new_boat))
+    return successors
+
+def bfs():
+    start = (3, 3, 1)  # All on left bank, boat on left
+    queue = deque()
+    queue.append((start, [start]))  # state, path
+    visited = set()
+
+    while queue:
+        current, path = queue.popleft()
+        if current == goal_state:
+            return path
+
+        if current in visited:
+            continue
+        visited.add(current)
+
+        for successor in get_successors(current):
+            if successor not in visited:
+                queue.append((successor, path + [successor]))
+    return None
+
+def print_path(path):
+    for i, state in enumerate(path):
+        m, c, b = state
+        side = "Left" if b == 1 else "Right"
+        print(f"Step {i}: Missionaries: {m}, Cannibals: {c}, Boat: {side}")
+    print("All safely crossed!")
+
+# Run the BFS solver
+solution = bfs()
+if solution:
+    print_path(solution)
+else:
+    print("No solution found.")
