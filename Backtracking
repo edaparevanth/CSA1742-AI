@@ -1,0 +1,17 @@
+% Define possible colors for each fruit
+fruit_color(apple, red).
+fruit_color(apple, green).
+fruit_color(banana, yellow).
+fruit_color(grape, purple).
+fruit_color(grape, green).
+fruit_color(orange, orange).
+fruit_color(mango, yellow).
+fruit_color(mango, green).
+
+% Query all valid color combinations using backtracking
+all_fruit_colors :-
+    fruit_color(Fruit, Color),
+    write(Fruit), write(' is '), write(Color), nl,
+    fail.  % force backtracking to find all combinations
+
+all_fruit_colors.  % to stop cleanly after fail
