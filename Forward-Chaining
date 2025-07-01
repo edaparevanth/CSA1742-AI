@@ -1,0 +1,58 @@
+:- dynamic known/1.
+
+% Sample base facts (can be added dynamically)
+known(fever).
+known(cough).
+known(sore_throat).
+
+% Inference rules
+rule(flu) :-
+    known(fever),
+    known(cough),
+    known(sore_throat),
+    \+ known(flu),
+    assert(known(flu)),
+    write('Inferred: flu'), nl.
+
+rule(covid19) :-
+    known(fever),
+    known(cough),
+    known(loss_of_taste),
+    known(breathing_difficulty),
+    \+ known(covid19),
+    assert(known(covid19)),
+    write('Inferred: covid19'), nl.
+
+rule(common_cold) :-
+    known(sneezing),
+    known(runny_nose),
+    known(sore_throat),
+    \+ known(common_cold),
+    assert(known(common_cold)),
+    write('Inferred: common_cold'), nl.
+
+% Forward chaining engine
+forward :-
+    rule(_),       % Apply all rules that match current facts
+    fail.
+forward.           % Succeeds when no more new facts can be inferred
+
+% Interactive interface to add facts
+add_fact(Fact) :-
+    \+ known(Fact),
+    assert(known(Fact)),
+    write('Added fact: '), write(Fact), nl.
+
+% Query system
+check(Disease) :-
+    known(Disease),
+    write('Diagnosis: '), write(Disease), nl, !.
+
+check(Disease) :-
+    \+ known(Disease),
+    write(Disease), write(' could not be inferred yet.'), nl.
+
+% Clear knowledge base
+clear_kb :-
+    retractall(known(_)),
+    write('Knowledge base cleared.'), nl.
